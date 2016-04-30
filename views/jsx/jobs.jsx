@@ -1,5 +1,6 @@
 var React = require('react');
 var $ = require('jquery');
+var fetch = require('whatwg-fetch');
 var moment = require('moment-timezone');
 var hljs = require('highlight.js');
 
@@ -66,6 +67,15 @@ var Job = React.createClass({
         }
       });
     }
+  },
+
+  parser: function(key, value) {
+    if (key === 'stacktrace') {
+      // TEMP: Really long stacktraces don't play well when trying to parse them
+      // out. This whole thing should be refactored anyway.
+      return value.substring(0, 500);
+    }
+    return value;
   },
 
   render: function() {
@@ -139,7 +149,7 @@ var Job = React.createClass({
           <br />
         </div>
         <pre className="job-code">
-          <code ref="code" dangerouslySetInnerHTML={{__html: JSON.stringify(job, null, 2)}} />
+          {JSON.stringify(job, this.parser, 2)}
         </pre>
       </div>
     );
