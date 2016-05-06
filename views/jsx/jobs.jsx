@@ -1,6 +1,5 @@
 var React = require('react');
 var $ = require('jquery');
-var fetch = require('whatwg-fetch');
 var moment = require('moment-timezone');
 var hljs = require('highlight.js');
 
@@ -70,10 +69,10 @@ var Job = React.createClass({
   },
 
   parser: function(key, value) {
+    // TEMP: Really long stacktraces don't play well when trying to parse them
+    // out. This whole thing should be refactored anyway.
     if (key === 'stacktrace') {
-      // TEMP: Really long stacktraces don't play well when trying to parse them
-      // out. This whole thing should be refactored anyway.
-      return value.substring(0, 500);
+      return value.substring(0, 1000);
     }
     return value;
   },
